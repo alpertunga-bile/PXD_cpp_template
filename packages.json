@@ -1,0 +1,14 @@
+{
+    "venv_folder": "venv",
+    "target_folder": "third-party",
+    "packages": [
+        {
+            "name": "embree",
+            "github_url": "https://github.com/RenderKit/embree",
+            "win_format": "{name}-{version}.x64.{os}",
+            "linux_format": "{name}-{version}.x86_64.{os}",
+            "version": null,
+            "file_ext": null
+        }
+    ]
+}
