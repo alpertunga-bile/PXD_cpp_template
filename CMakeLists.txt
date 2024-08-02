@@ -24,7 +24,7 @@ set(PXD_HEADER_FILES
 )
 
 set(PXD_SOURCE_FILES
-
+    main.cpp
 )
 
 include_directories(
