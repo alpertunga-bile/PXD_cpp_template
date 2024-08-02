@@ -2,6 +2,7 @@ from platform import system
 from os.path import exists, join, realpath
 from subprocess import run
 from typing import Tuple
+from os import makedirs
 
 
 def get_venv_foldername(json_filename: str) -> Tuple[str, str]:
@@ -100,6 +101,9 @@ if __name__ == "__main__":
     )
 
     run(f"{python_exec} third_wheel.py", shell=True, check=True)
+
+    makedirs("includes", exist_ok=True)
+    makedirs("sources", exist_ok=True)
 
     print("/_\ Creating CMakeLists file")
     create_cmake_file(packages_folder)
