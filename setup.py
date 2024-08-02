@@ -37,6 +37,8 @@ set(PXD_THIRD_PARTY_DIR ${{CMAKE_CURRENT_SOURCE_DIR}}/{packages_folder})
 set(PXD_INCLUDE_DIR ${{CMAKE_CURRENT_SOURCE_DIR}}/includes)
 set(PXD_SOURCE_DIR ${{CMAKE_CURRENT_SOURCE_DIR}}/sources)
 
+add_subdirectory(${{PXD_THIRD_PARTY_DIR}}/PXD-STL)
+
 set(PXD_HEADER_FILES
 
 )
@@ -46,7 +48,7 @@ set(PXD_SOURCE_FILES
 )
 
 include_directories(
-
+    ${{PXD_STL_INCLUDE_DIR}}
 )
 
 set(COMMON_STD_HEADERS
@@ -54,7 +56,7 @@ set(COMMON_STD_HEADERS
 )
 
 set(LIBS_TO_LINK
-
+    pxd-stl
 )
 
 add_executable(${{PROJECT_NAME}} ${{PXD_SOURCE_FILES}})
@@ -104,6 +106,3 @@ if __name__ == "__main__":
 
     makedirs("includes", exist_ok=True)
     makedirs("sources", exist_ok=True)
-
-    print("/_\ Creating CMakeLists file")
-    create_cmake_file(packages_folder)
