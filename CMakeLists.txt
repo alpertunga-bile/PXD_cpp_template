@@ -1,6 +1,6 @@
 
 cmake_minimum_required(VERSION 3.5.0)
-project(cpp-template VERSION 0.1.0 LANGUAGES C CXX)
+project(pxd-cpp-template VERSION 0.1.0 LANGUAGES C CXX)
 
 include(CTest)
 enable_testing()

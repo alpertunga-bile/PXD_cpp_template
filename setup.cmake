@@ -1,4 +1,3 @@
-
 function(set_debug)
     IF(NOT MSVC)
         set(CMAKE_BUILD_TYPE "Debug")
@@ -12,11 +11,11 @@ function(set_release)
 endfunction(set_release)
 
 function(set_cxx CXX_VERSION)
-    set(CMAKE_CXX_STANDARD ${{CXX_VERSION}})
+    set(CMAKE_CXX_STANDARD ${CXX_VERSION})
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     
     if(NOT MSVC)
-        set(CMAKE_CXX_FLAGS "${{CMAKE_CXX_FLAGS}} -std=c++${{CXX_VERSION}}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++${CXX_VERSION}")
     endif()
 endfunction(set_cxx)
 
