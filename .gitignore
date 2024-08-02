@@ -162,5 +162,4 @@ cython_debug/
 #.idea/
 
 build/
-main.cpp/
 app.log
