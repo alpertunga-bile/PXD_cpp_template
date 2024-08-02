@@ -21,3 +21,7 @@ git submodule init
 echo "Updating PXD-STL repository's third-party repositories"
 
 git submodule update --depth 1
+
+clear
+
+echo "Setup is finished"
