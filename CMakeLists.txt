@@ -24,7 +24,7 @@ set(PXD_HEADER_FILES
 )
 
 set(PXD_SOURCE_FILES
-    main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 )
 
 include_directories(
