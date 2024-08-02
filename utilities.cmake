@@ -10,7 +10,7 @@ function(copy_dll_files project_target binary_dir dll_files)
 
   foreach(dll_file IN LISTS dll_files)
     get_filename_component(DLL_FILENAME ${dll_file} NAME_WE)
-    add_custom_target(${DLL_FILENAME}_TARGET 
+    add_custom_target(${DLL_FILENAME}_COPY_TARGET 
       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${dll_file} ${binary_dir}
     )
 
