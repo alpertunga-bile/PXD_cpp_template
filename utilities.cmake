@@ -14,7 +14,7 @@ function(copy_dll_files project_target binary_dir dll_files)
       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${dll_file} ${binary_dir}
     )
 
-    add_dependencies(${project_target} ${DLL_FILENAME}_TARGET)
+    add_dependencies(${project_target} ${DLL_FILENAME}_COPY_TARGET)
   endforeach()
   
 endfunction()
