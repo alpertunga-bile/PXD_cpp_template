@@ -32,7 +32,8 @@ endfunction(enable_avx2)
 
 function(enable_iwyu)
     if(NOT WIN32)
-        add_compile_definitions(CMAKE_CXX_INCLUDE_WHAT_YOU_USE="include-what-you-use")
+        set(IWYU_ARGS include-what-you-use -w -Xiwyu --verbose=7)
+        add_compile_definitions(CMAKE_CXX_INCLUDE_WHAT_YOU_USE=${IWYU_ARGS})
     endif(NOT WIN32)
 endfunction(enable_iwyu)
             
