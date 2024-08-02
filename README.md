@@ -11,4 +11,6 @@ Starting point for cpp projects of the PixelDancer projects.
 ## Usage
 - Clone the repository with ```git clone https://github.com/alpertunga-bile/PXD_cpp_template.git``` command
 - Fill the ```packages.json``` for precompiled binaries to be installed from the Github repositories
-- Run the ```setup.bat``` file if you are using Windows OS, the ```setup.sh``` file if you are using Linux OS
+- Run
+  - the ```setup.bat``` file if you are using Windows OS
+  - the ```setup.sh``` file if you are using Linux OS
