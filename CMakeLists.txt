@@ -22,7 +22,7 @@ set(PXD_HEADER_FILES
 )
 
 set(PXD_SOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+
 )
 
 include_directories(
@@ -36,7 +36,7 @@ set(COMMON_STD_HEADERS
 set(LIBS_TO_LINK
 )
 
-add_executable(${PROJECT_NAME} ${PXD_SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp ${PXD_SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} ${LIBS_TO_LINK})
 
@@ -45,6 +45,51 @@ target_precompile_headers(
     ${COMMON_STD_HEADERS}
     ${PXD_HEADER_FILES}
 )
+
+# ------------------------------------------------------------------------------
+# -- Test Executable
+
+if(PXD_BUILD_TEST)
+    set(PXD_TEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
+    set(PXD_TEST_PROJECT_NAME ${PROJECT_NAME}_test)
+
+    set(PXD_TEST_SOURCE_FILES
+        ${PXD_TEST_SOURCE_DIR}/test.cpp
+
+        ${PXD_SOURCE_FILES}
+    )
+
+    include(FetchContent)
+    FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest/
+        GIT_TAG main
+    )
+
+    if(WIN32)
+        # For Windows: Prevent overriding the parent project's compiler/linker settings
+        set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    endif(WIN32)
+    FetchContent_MakeAvailable(googletest)
+
+    enable_testing()
+
+    add_executable(${PXD_TEST_PROJECT_NAME} ${PXD_TEST_SOURCE_FILES})
+
+    target_link_libraries(${PXD_TEST_PROJECT_NAME} ${LIBS_TO_LINK} GTest::gtest_main)
+
+    include(GoogleTest)
+    gtest_discover_tests(${PXD_TEST_PROJECT_NAME})
+
+    target_precompile_headers(
+        ${PXD_TEST_PROJECT_NAME} PRIVATE
+        ${COMMON_STD_HEADERS}
+        ${PXD_HEADER_FILES}
+    )
+
+endif()
+unset(PXD_BUILD_TEST CACHE)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
