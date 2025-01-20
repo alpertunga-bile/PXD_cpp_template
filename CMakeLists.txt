@@ -1,11 +1,12 @@
-
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.10.0)
 project(pxd-cpp-template VERSION 0.1.0 LANGUAGES C CXX)
+
+LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmakes)
 
 include(CTest)
 enable_testing()
 
-include(setup.cmake)
+include(setup)
 
 set_cxx(20)
 enable_iwyu()
@@ -14,10 +15,7 @@ set(PXD_THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third-party)
 set(PXD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
 set(PXD_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sources)
 
-set(PXD_STL_BUILD_TEST_EXECUTABLE OFF)
-add_subdirectory(${PXD_THIRD_PARTY_DIR}/PXD-STL)
-
-set(PXD_STL_INCLUDE_DIR ${PXD_THIRD_PARTY_DIR}/PXD-STL/includes)
+option(PXD_BUILD_TEST "Build test executable" OFF)
 
 set(PXD_HEADER_FILES
 
@@ -28,7 +26,7 @@ set(PXD_SOURCE_FILES
 )
 
 include_directories(
-    ${PXD_STL_INCLUDE_DIR}
+    ${PXD_INCLUDE_DIR}
 )
 
 set(COMMON_STD_HEADERS
@@ -36,7 +34,6 @@ set(COMMON_STD_HEADERS
 )
 
 set(LIBS_TO_LINK
-    pxd-stl
 )
 
 add_executable(${PROJECT_NAME} ${PXD_SOURCE_FILES})
