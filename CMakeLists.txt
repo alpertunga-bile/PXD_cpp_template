@@ -37,7 +37,7 @@ set(COMMON_STD_HEADERS
 
 # ---------------------------------------------------------------
 include(FetchContent)
-set(BUILD_SHARED_LIBRARIES OFF)
+set(BUILD_SHARED_LIBRARY OFF)
 
 # --- fmt
 FetchContent_Declare(
