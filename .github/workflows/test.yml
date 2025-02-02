@@ -2,37 +2,37 @@ name: multi-platform-test
 
 on:
   push:
-      branches: master
+    branches: [master]
 
 jobs:
-    build:
-        runs-on: ${{matrix.os}}
+  build:
+    runs-on: ${{matrix.os}}
 
-        strategy:
-            fail-fast: false
+    strategy:
+      fail-fast: false
 
-            matrix:
-                os: [ubuntu-latest, windows-latest, macos-latest]
-                build_type: [Release]
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        build_type: [Release]
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: set reusable strings
-              id: strings
-              shell: bash
-              run: |
-                echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+      - name: set reusable strings
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-            - name: Configure CMake
-              env:
-                CXX: clang++
-              working-directory: ${{github.workspace}}
-              run: cmake -B ${{ steps.strings.outputs.build-output-dir }} -DPXD_BUILD_TEST=ON
+      - name: Configure CMake
+        env:
+          CXX: clang++
+        working-directory: ${{github.workspace}}
+        run: cmake -B ${{ steps.strings.outputs.build-output-dir }} -DPXD_BUILD_TEST=ON
 
-            - name: Build
-              run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+      - name: Build
+        run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }} -j8
 
-            - name: Test
-              working-directory: ${{ steps.strings.outputs.build-output-dir }}
-              run: ctest
+      - name: Test
+        working-directory: ${{ steps.strings.outputs.build-output-dir }}
+        run: ctest
