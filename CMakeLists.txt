@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10.0)
 project(pxd-cpp-template VERSION 0.1.0 LANGUAGES C CXX)
 
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmakes)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/install)
 
 include(CTest)
 enable_testing()
@@ -11,9 +12,9 @@ include(setup)
 set_cxx(20)
 enable_iwyu()
 
-set(PXD_THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third-party)
 set(PXD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
 set(PXD_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sources)
+set(PXD_THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third-party)
 
 option(PXD_BUILD_TEST "Build test executable" OFF)
 
@@ -23,6 +24,7 @@ set(PXD_HEADER_FILES
 
 set(PXD_SOURCE_FILES
 
+  ${PXD_HEADER_FILES}
 )
 
 include_directories(
@@ -33,7 +35,23 @@ set(COMMON_STD_HEADERS
 
 )
 
+# ---------------------------------------------------------------
+include(FetchContent)
+set(BUILD_SHARED_LIBRARIES OFF)
+
+# --- fmt
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt
+  GIT_TAG master
+)
+FetchContent_MakeAvailable(fmt)
+
+
+# ---------------------------------------------------------------
+
 set(LIBS_TO_LINK
+  fmt::fmt
 )
 
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp ${PXD_SOURCE_FILES})
@@ -50,7 +68,7 @@ target_precompile_headers(
 # -- Test Executable
 
 if(PXD_BUILD_TEST)
-    set(PXD_TEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    set(PXD_TEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
 
     set(PXD_TEST_PROJECT_NAME ${PROJECT_NAME}_test)
 
@@ -60,7 +78,6 @@ if(PXD_BUILD_TEST)
         ${PXD_SOURCE_FILES}
     )
 
-    include(FetchContent)
     FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest/
@@ -94,4 +111,3 @@ unset(PXD_BUILD_TEST CACHE)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
-        
