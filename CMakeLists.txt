@@ -7,10 +7,18 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/install)
 include(CTest)
 enable_testing()
 
-include(setup)
+set(CXX_VERSION 20)
+set(CMAKE_CXX_STANDARD ${CXX_VERSION})
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set_cxx(20)
-enable_iwyu()
+if(NOT MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++${CXX_VERSION}")
+endif()
+
+if(NOT WIN32)
+  set(IWYU_ARGS "include-what-you-use -w -Xiwyu --verbose=7")
+  add_compile_definitions(CMAKE_CXX_INCLUDE_WHAT_YOU_USE=${IWYU_ARGS})
+endif(NOT WIN32)
 
 set(PXD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
 set(PXD_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sources)
@@ -19,10 +27,11 @@ set(PXD_THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third-party)
 option(PXD_BUILD_TEST "Build test executable" OFF)
 
 set(PXD_HEADER_FILES
-
+  ${PXD_INCLUDE_DIR}/logger.hpp
 )
 
 set(PXD_SOURCE_FILES
+  ${PXD_SOURCE_DIR}/logger.cpp
 
   ${PXD_HEADER_FILES}
 )
@@ -104,8 +113,7 @@ if(PXD_BUILD_TEST)
         ${COMMON_STD_HEADERS}
         ${PXD_HEADER_FILES}
     )
-
-endif()
+endif(PXD_BUILD_TEST)
 unset(PXD_BUILD_TEST CACHE)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

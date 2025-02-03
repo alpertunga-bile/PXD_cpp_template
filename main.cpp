@@ -1,9 +1,9 @@
-#include <iostream>
+#include "includes/logger.hpp"
 
 auto
 main() -> int
 {
-  std::cout << "Hello World\n";
+  PXD_LOG_INFO("Hello World {}", "!!!");
 
   return 0;
 }
