@@ -17,7 +17,7 @@ jobs:
         build_type: [Release]
         architecture: [x86_64]
         project-name: [pxd-cpp-template]
-        cmake-args: [-DCMAKE_CXX_COMPILER=clang++ -G "Ninja"]
+        cmake-args: [-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G "Ninja"]
         job:
           - os: macos-latest
             os-name: macos
