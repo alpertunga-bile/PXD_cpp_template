@@ -17,6 +17,7 @@ jobs:
         build_type: [Release]
         architecture: [x86_64]
         project-name: [pxd-cpp-template]
+        cmake-args: [-DCMAKE_CXX_COMPILER=clang++ -G "Ninja"]
         job:
           - os: macos-latest
             os-name: macos
@@ -41,7 +42,7 @@ jobs:
         env:
           CXX: clang++
         working-directory: ${{github.workspace}}
-        run: cmake -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -B ${{steps.strings.outputs.build-output-dir}}
+        run: cmake ${{matrix.cmake-args}} -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -B ${{steps.strings.outputs.build-output-dir}}
 
       - name: Build
         run: cmake --build ${{steps.strings.outputs.build-output-dir}} --config ${{matrix.build_type}} -j8
