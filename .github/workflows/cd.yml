@@ -35,12 +35,12 @@ jobs:
         id: strings
         shell: bash
         run: |
-          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+          echo "build-output-dir=$GITHUB_WORKSPACE/build" >> "$GITHUB_OUTPUT"
 
       - name: Configure CMake
         env:
           CXX: clang++
-        working-directory: ${{github.workspace}}
+        working-directory: $GITHUB_WORKSPACE
         run: cmake -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -B ${{steps.strings.outputs.build-output-dir}}
 
       - name: Build
