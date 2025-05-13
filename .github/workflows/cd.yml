@@ -1,0 +1,73 @@
+name: CD
+on:
+  push:
+    tags:
+      - "[v]?[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  publish:
+    name: Publishing for ${{ matrix.jobs.os }}
+    runs-on: ${{matrix.jobs.on}}
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+
+      matrix:
+        build_type: [Release]
+        architecture: [x86_64]
+        project-name: [pxd-cpp-template]
+        job:
+          - os: macos-latest
+            os-name: macos
+            binary-postfix: ""
+          - os: ubuntu-latest
+            os-name: linux
+            binary-postfix: ""
+          - os: windows-latest
+            os-name: windows
+            binary-postfix: ".exe"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Reusable Strings
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+      - name: Configure CMake
+        env:
+          CXX: clang++
+        working-directory: ${{github.workspace}}
+        run: cmake -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -B ${{steps.strings.outputs.build-output-dir}}
+
+      - name: Build
+        run: cmake --build ${{steps.strings.outputs.build-output-dir}} --config ${{matrix.build_type}} -j8
+
+      - name: Packaging Final Binary
+        shell: bash
+        run: |
+          cd ${{steps.strings.outputs.build-output-dir}} 
+          
+          BINARY_NAME=${{matrix.project-name}}${{matrix.job.binary-postfix}}
+          
+          RELEASE_NAME=${{matrix.project-name}}-${GITHUB_REF/refs\/tags\//}-${{matrix.job.os-name}}-${{matrix.architecture}}
+          tar czvf $RELEASE_NAME.tar.gz $BINARY_NAME
+          
+          if [[ ${{ runner.os }} == 'Windows' ]]; then
+            certutil -hashfile $RELEASE_NAME.tar.gz sha256 | grep -E [A-Fa-f0-9]{64} > $RELEASE_NAME.sha256
+          else
+            shasum -a 256 $RELEASE_NAME.tar.gz > $RELEASE_NAME.sha256
+          fi
+
+      - name: Releasing Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{steps.strings.outputs.build-output-dir}}/${{matrix.project-name}}-*.tar.gz            
+            ${{steps.strings.outputs.build-output-dir}}/${{matrix.project-name}}-*.sha256
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
