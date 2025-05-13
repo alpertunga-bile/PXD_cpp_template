@@ -50,7 +50,10 @@ jobs:
       - name: Packaging Final Binary
         shell: bash
         run: |
-          cd ${{steps.strings.outputs.build-output-dir}} 
+          echo $GITHUB_WORKSPACE
+          echo ${{steps.strings.outputs.build-output-dir}}
+          
+          cd $GITHUB_WORKSPACE/build
           
           BINARY_NAME=${{matrix.project-name}}${{matrix.job.binary-postfix}}
           

@@ -1,4 +1,4 @@
-name: multi-platform-test
+name: CI
 
 on:
   push:
@@ -6,7 +6,8 @@ on:
 
 jobs:
   build:
-    runs-on: ${{matrix.os}}
+    name: Testing on ${{ matrix.job.os }}
+    runs-on: ${{ matrix.job.os }}
 
     strategy:
       fail-fast: false
@@ -14,6 +15,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         build_type: [Release]
+        cmake-args: [-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G "Ninja"]
 
     steps:
       - uses: actions/checkout@v4
@@ -28,7 +30,7 @@ jobs:
         env:
           CXX: clang++
         working-directory: ${{github.workspace}}
-        run: cmake -DCMAKE_BUILD_TYPE=Release -B ${{ steps.strings.outputs.build-output-dir }} -DPXD_BUILD_TEST=ON
+        run: cmake ${{matrix.cmake-args}} -DCMAKE_BUILD_TYPE=Release -B ${{ steps.strings.outputs.build-output-dir }} -DPXD_BUILD_TEST=ON
 
       - name: Build
         run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }} -j8
