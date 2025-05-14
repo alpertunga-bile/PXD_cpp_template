@@ -67,8 +67,8 @@ Logger::log(fmt::string_view log_level,
                  base_filename,
                  line,
                  func_name);
+#endif
 }
 
-#endif
 
 } // namespace pxd
