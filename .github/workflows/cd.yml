@@ -53,6 +53,7 @@ jobs:
           cd $GITHUB_WORKSPACE/build
           
           BINARY_NAME=${{matrix.project-name}}${{matrix.job.binary-postfix}}
+          strip $BINARY_NAME
           
           RELEASE_NAME=${{matrix.project-name}}-${GITHUB_REF/refs\/tags\//}-${{matrix.job.os-name}}-${{matrix.architecture}}
           tar czvf $RELEASE_NAME.tar.gz $BINARY_NAME
