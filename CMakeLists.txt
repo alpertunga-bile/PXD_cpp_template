@@ -33,8 +33,8 @@ if(${CMAKE_BUILD_TYPE} MATCHES "Release")
   endif(is_supported)
 
   if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    message(STATUS "Adding -O3 -march=native -flto flags")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -march=native -flto")
+    message(STATUS "Adding -O3 -flto flags")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -flto")
   endif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
 endif(${CMAKE_BUILD_TYPE} MATCHES "Release")
